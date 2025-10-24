@@ -1,0 +1,5 @@
+rapaz vou querer fazer uma busca de quem ta vivo e quem ta morto,
+e bom fazer uma busca dos personagem da primeira temporada e da segunda,
+Sugestão de crescimento:
+
+Para futuros updates, você pode adicionar categorias como "tipo":"herói"|"vilão"|"neutro" ou "afiliação":"Súper Grupo"/"Solteiro", para deixar a API mais “consultável” e interessante para o portfólio.
