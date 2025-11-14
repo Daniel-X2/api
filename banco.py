@@ -29,6 +29,7 @@ class banco():
         self.engine = create_engine("sqlite:///dados/banco.db", echo=True)
         Base.metadata.create_all(self.engine)
         self.adicionar_dados_json()
+        self.buscar_elenco("vivo",["Matador", "Especialista em qualquer tipo de arma"])
     def adicionar_dados_json(self):
         with Session(self.engine) as session:
             if session.query(User).count()>0:
@@ -40,19 +41,42 @@ class banco():
                         outro=User(nome=n["nome"],ator=n["ator"],status=n["status"],habilidades=n["habilidade"],upvote=n["upvote"])
                         session.add(outro)
                         session.commit()
-    def elenco(self):
+    
+    def buscar_elenco(self,status=None,habilidade=None,mais_votado=False):
         with Session(self.engine) as session:
-            elenco=session.query(User.nome,User.ator,User.status,
-            User.habilidades,User.upvote).all()
-
+            parametros=list()
+            if(status==None and habilidade==None and mais_votado==False):
+                elenco=session.query(User.nome,User.ator,User.status,
+                    User.habilidades,User.upvote).all()
+            else:
+                if(status!=None and habilidade!=None and mais_votado!= False):
+                    elenco=session.query(User.nome,User.ator,User.status,
+                    User.habilidades,User.upvote).filter(User.status==status,User.habilidades==habilidade).first()
+                else:
+                    if(status!=None):
+                        parametros.append(User.status == status)
+                    
+                    if(habilidade==None):
+                        parametros.append(User.habilidades == habilidade)
+                    if(mais_votado!=True):
+                        parametros.append(User.status )
+                elenco=session.query(User.nome,User.ator,User.status,
+                    User.habilidades,User.upvote).filter(parametros.pop()).all()
+                
             lista_de_dict=list()
-
             dicionario=dict()
-            for c in range(0,len(elenco)):
-                dicionario={"nome":elenco[c][0],"ator":elenco[c][1],"status":elenco[c][2],
-                "habilidade":elenco[c][3],"upvote":elenco[c][4]}
-                lista_de_dict.append(dicionario)
-            return lista_de_dict
+            try:
+                for c in range(0,len(elenco)):
+                    dicionario={"nome":elenco[c][0],"ator":elenco[c][1],"status":elenco[c][2],
+                    "habilidade":elenco[c][3],"upvote":elenco[c][4]}
+                    lista_de_dict.append(dicionario)
+                return lista_de_dict
+            except IndexError:
+                for c in range(0,len(elenco[0])):
+                    dicionario={"nome":elenco[c][0],"ator":elenco[c][1],"status":elenco[c][2],
+                    "habilidade":elenco[c][3],"upvote":elenco[c][4]}
+                    lista_de_dict.append(dicionario)
+                return lista_de_dict
     def atualizar_voto(self,personagem):
          with Session(self.engine) as session:
             ##
@@ -73,9 +97,11 @@ class banco():
             except:
                 return 2
             return 0
+    
     def buscar(self,atorr,personagem=None):
         with Session(self.engine) as session:
             if(personagem==None):
+                
                 dados=session.query(User.nome,User.ator,User.status,User.habilidades,User.upvote).filter(User.ator.ilike(f"%{atorr}%"))
                 return {"nome":dados[0][0],"ator":dados[0][1],"status":dados[0][2],"habilidade":dados[0][3],"upvote":dados[0][4]}
             else:

@@ -1,5 +1,97 @@
-rapaz vou querer fazer uma busca de quem ta vivo e quem ta morto,
-e bom fazer uma busca dos personagem da primeira temporada e da segunda,
-Sugestão de crescimento:
 
-Para futuros updates, você pode adicionar categorias como "tipo":"herói"|"vilão"|"neutro" ou "afiliação":"Súper Grupo"/"Solteiro", para deixar a API mais “consultável” e interessante para o portfólio.
+
+🟢 FÁCIL (implementa em minutos):
+
+Endpoint de estatísticas
+
+/stats - Total de personagens, mais votado, distribuição vivo/morto
+Só fazer queries COUNT e ORDER BY
+
+
+Filtros no /elenco
+
+/elenco?status=vivo - Filtrar por status
+/elenco?habilidade=Matador - Buscar por habilidade específica
+
+
+Top personagens
+
+/elenco/top/{numero} - Retorna os N mais votados
+Exemplo: /elenco/top/3 retorna top 3
+
+
+Busca por habilidade
+
+/habilidades/{nome} - Lista personagens com determinada habilidade
+
+
+
+🟡 MÉDIO (bom desafio):
+
+
+
+Ranking/Leaderboard
+
+/ranking - Lista ordenada por upvotes com posição
+Adicionar campo rank calculado dinamicamente
+
+
+Sistema de downvote
+
+POST /votar/{personagem}?tipo=down - Permitir downvote também
+Adicionar campo downvote no banco
+
+
+Histórico de votos
+
+Nova tabela pra registrar quem votou quando
+/personagem/{nome}/historico-votos
+
+
+
+🔴 DESAFIADOR (vai aprender muito):
+
+Sistema de usuários
+
+Cadastro/Login simples
+Cada voto vinculado a um usuário
+Limite: 1 voto por usuário por personagem
+
+
+Comparação de personagens
+
+/comparar?p1=Pacificador&p2=Vigilante
+Retorna lado a lado habilidades, votos, etc.
+
+
+
+
+
+Falta validação de entrada - Não usa Pydantic models
+Tratamento de exceções genérico - except: sem especificar o erro (banco.py linha 66)
+Query ineficiente - Busca dados duas vezes no atualizar_voto
+Sem documentação - Faltam docstrings e type hints consistentes
+
+🔧 Melhorias Necessárias:
+Alta Prioridade:
+
+Corrigir db=banco() reutilizando a instância existente no voto
+Adicionar Pydantic models para validação
+Melhorar tratamento de exceções específicas
+Adicionar logs adequados
+
+Média Prioridade:
+
+Implementar paginação no /elenco
+Adicionar autenticação/rate limiting no /votar
+Criar testes unitários
+Melhorar nomenclatura (português/inglês misturado)
+
+Baixa Prioridade:
+
+Adicionar CORS se necessário
+Documentação OpenAPI customizada
+Migrations com Alembic
+Cache para queries frequentes
+
+💡 Exemplo de Correção Rápida:
