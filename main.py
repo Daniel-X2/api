@@ -1,14 +1,12 @@
 from fastapi import FastAPI
 from fastapi import HTTPException
-
 from banco import banco
 from consulta import consulta
-
+from erros import *
 
 app=FastAPI()
 db=banco()
-db.adicionar_dados_json()
-busca=consulta()
+buscar=consulta()
 
 @app.get("/")
 def home():
@@ -16,41 +14,40 @@ def home():
    
 @app.get("/elenco")
 def elenco(status:str = None,habilidade:str=None,mais_votado:bool=False):
-    n1=busca.buscar_com_filtro(status_=status,habilidade_=habilidade,mais_votado_=mais_votado)
-    
-    return n1
+    try:
+        dados=buscar.buscar_com_filtro(status_=status,habilidade_=habilidade,mais_votado_=mais_votado)
+    except ValorVazio:
+        raise HTTPException(status_code=404, detail="nenhum personagem encontrado com essas caracteristicas")
+    except IndexError:
+        raise HTTPException(status_code=404, detail="Erro inesperado ")
+    return dados
 @app.get("/elenco/{ator}")
 def busca_ator(ator:str):
     try:
-        dados_ator=busca.buscar(ator_=ator)
+        dados_ator=buscar.buscar_ator(ator_=ator)
         
-        if (dados_ator):
-           
-            return dados_ator
-        else:
-            raise HTTPException(status_code=404, detail="Ator não encontrado")
-    except Exception as e:
-        print(f"erro no main.py {e}") 
+        return dados_ator
+    except ErroValorMinimo:
+        raise HTTPException(status_code=404, detail="Valor minimo de caracteres nao foram cumpridos")
+    except ValorVazio():
         raise HTTPException(status_code=404, detail="ator nao enconstrado")
 @app.get("/personagem/{personagem}")
 def buscar_personagem(personagem:str):
     try:
-        dados_personagem=busca.buscar(personagem_=personagem)
-        print(dados_personagem)
-        if (dados_personagem):
-            return dados_personagem
-        else:
-            raise HTTPException(status_code=404, detail="personagem não encontrado")
-    except Exception as e:
-        print(f"erro main.py {e}")
-        raise HTTPException(status_code=404, detail="personagem nao encontrado")
+        dados_personagem=buscar.buscar_personagem(personagem_=personagem)
+       
+        return dados_personagem
+    except ErroValorMinimo:
+        raise HTTPException(status_code=404, detail="Valor minimo de caracteres nao foram cumpridos")
+    except ValorVazio():
+        raise HTTPException(status_code=404, detail="personagem nao enconstrado")
 @app.post("/votar/{personagem}")
 def upvote(personagem):
-    voto=busca.atualizar_voto(personagem)
-    if voto==0:
-        return "adicionado com sucesso"
-    elif voto==1:
-        raise HTTPException(status_code=404, detail="personagem não encontrado")
-    else:
-        raise HTTPException(status_code=400, detail="problema no banco de dados")
+    try:
+        voto=buscar.atualizar_voto(personagem)
+        return "sucesso"
+    except ErroNenhumResultado:
+         raise HTTPException(status_code=404, detail="personagem não encontrado")
+    except ValorVazio:
+        raise  HTTPException(status_code=404, detail="personagem não encontrado")
 #uvicorn main:app --reload

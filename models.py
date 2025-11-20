@@ -1,4 +1,3 @@
-
 from sqlalchemy import String
 from sqlalchemy import INTEGER
 from sqlalchemy import JSON

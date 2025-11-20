@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import json
 from models import User
 from models import Base
-
+from erros import *
 engine = create_engine("sqlite:///dados/banco.db")
 Base.metadata.create_all(engine)
 
@@ -26,6 +26,6 @@ class banco():
                         session.add_all(lista_dados)
                         session.commit()
                 except Exception as e:
-                    print(f"erro no banco.py {e}")
+                    raise ErroNoBancoSql(e)
     
 

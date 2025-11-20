@@ -2,11 +2,8 @@ from sqlalchemy import update
 from sqlalchemy.orm import Session
 from banco import engine
 from models import User
+from erros import *
 
-###
-# mano vou criar classes de exceçoes pra facilitar meu uso 
-# e facilitar o diagnostico de erro
-# ##
 class consulta():
     def __init__(self):
         pass
@@ -21,38 +18,53 @@ class consulta():
 
             if(status_==None and habilidade_==None and mais_votado_==False):
                 #aqui serve principalmente pra listar todos no elenco
-                return self.loop_busca(busca.all(),False)
+                try:
+                    return self.loop_busca(busca.all(),False)
+                except ValorVazio:
+                    raise ValorVazio
+                except IndexError:
+                    raise IndexError
             if(status_!=None):
                 busca=busca.filter(User.status==status_)
             if(habilidade_!=None):
                 busca=busca.filter(User.habilidades.contains(habilidade_))
-            return self.loop_busca(busca.all(),mais_votado_)
-     
-    def buscar(self,ator_=None,personagem_=None):
-        if(len(str(ator_).split())<=3):
-            #verifica se tem 
-            print("ola")
-            return 
+            try:
+                return self.loop_busca(busca.all(),mais_votado_)
+            except ValorVazio:
+                raise ValorVazio
+            except IndexError:
+                raise IndexError  
+    def buscar_ator(self,ator_:str=None):
+        
         with Session(engine) as session:
 
-            if(ator_!=None and ator_!="" ):  
+            quantidade_caracteres=len(ator_.replace(" ",""))
+            if(quantidade_caracteres>=4):
                 dados=session.query(User.nome,User.ator,User.status,User.habilidades,User.upvote).filter(User.ator.ilike(f"{ator_}%")).first()
                     
-                if(dados!= None):
-                        return {"nome":dados[0],"ator":dados[1],"status":dados[2],"habilidade":dados[3],"upvote":dados[4]}
+                if(dados!= None and dados !=""):
+                    return {"nome":dados[0],"ator":dados[1],"status":dados[2],"habilidade":dados[3],"upvote":dados[4]}
                 else:
-                    return None
+                    raise ErroNenhumResultado("ator")
             else:
+                raise ErroValorMinimo("ator",4,quantidade_caracteres)
+    def buscar_personagem(self,personagem_:str=None):
+
+        with Session(engine) as session:
+            quantidade_caracteres=len(personagem_.replace(" ",""))
+            if(quantidade_caracteres>=4):
                 dados=session.query(User.nome,User.ator,User.status,User.habilidades,User.upvote).filter(User.nome.ilike(f"{personagem_}%")).first()
                 if(dados!=None):
                     return {"nome":dados[0],"ator":dados[1],"status":dados[2],"habilidade":dados[3],"upvote":dados[4]}
                 else:
-                    return None
+                    raise ErroNenhumResultado("personagem")
+            else:
+                raise ErroValorMinimo("personagem",4,quantidade_caracteres)
     def loop_busca(self,dados_,mais_votado:bool):
         lista=list()
 
-        if(dados_==None):
-            return None
+        if(dados_==None or dados_==""):
+            raise ErroNenhumResultado("")
         try:
             for c in range(0,len(dados_)):
                             
@@ -68,29 +80,29 @@ class consulta():
                         personagem=lista[c]
                     else:
                         continue
+                
+                
                 return personagem
+            
+            
             return lista
-        except Exception as e:
-            print(f"erro em consulta.py {e}")
-            return lista
+        
+        except IndexError:
+            raise IndexError
     def atualizar_voto(self,personagem):
         with Session(engine) as session: 
-            ##
-            #esse User.ator.ilike ele nao faz diferenciaçao entre maiusculo ou minusculo 
-            #  se tiver  john como parametro e aparecer jjjjohnnn ele vai pegar como se fosse 
-            #john
-            #  ##
+            
             try:
-                #contagem=session.query(User.upvote).filter(User.nome.ilike(f"{personagem}%"))
+                
                 smt=(update(User).filter(User.nome.ilike(f"{personagem}%")).values(upvote=User.upvote+1))
-                session.execute(smt)
-                session.commit() 
-                if(smt==None):
-                    return None
+                #n1=session.execute(smt)
+                n2=session.connection().execute(smt)
+                if(n2.rowcount==0):
+                    raise ErroNenhumResultado("Personagem")
+                session.commit()
+
             except Exception as e:
-                print(f"erro consulta.py {e}")
-                return 2
+                
+                raise ErroNoBancoSql(e)
             return 0
    
-
-
