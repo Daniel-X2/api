@@ -27,4 +27,4 @@ def adicionar_dados_json():
             except Exception as e:
                 raise ErroNoBancoSql(e)
     
-adicionar_dados_json()
+
