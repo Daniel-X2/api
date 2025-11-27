@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import json
-from modelos.models import Elenco
-from modelos.models import Base
-from Erros_personalizado.erros import *
+from src.modelos.models import Elenco,Base
+
+from src.Erros_personalizado.erros import *
 
 engine = create_engine("sqlite:///dados/banco.db")
 Base.metadata.create_all(engine)

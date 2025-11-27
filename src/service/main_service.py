@@ -1,21 +1,21 @@
 from pydantic_core import _pydantic_core
-from repository.repo import ElencoRepository
-from dto.dto import ElencoDto,serializar_lista,serializar_dict
-from Erros_personalizado.erros import *
+from src.repository.main_repository import ElencoRepository
+from src.dto.dto import ElencoDto,serializar_lista,serializar_dict
+from src.Erros_personalizado.erros import *
 repository=ElencoRepository()
 class ElencoService():
 
     def __init__(self):
         pass
-    def buscar_com_filtro(self,vivo:bool=True,habilidade_:str=None,mais_votado_:bool=False):
+    def buscar_com_filtro(self,vivo:bool=True,habilidade:str=None,mais_votado:bool=False):
         smt=repository.get_select()
         smt=repository.filtro_status(status=vivo,smt=smt)
-        if(habilidade_!=None and habilidade_!="" ):
-            if( len(habilidade_.strip())>=3):
-                smt=repository.filtro_habilidades(habilidade=habilidade_,smt=smt)
+        if(habilidade!=None and habilidade!="" ):
+            if( len(habilidade.strip())>=3):
+                smt=repository.filtro_habilidades(habilidade=habilidade,smt=smt)
             else:
                 raise ErroValorMinimo
-        if (mais_votado_==True):
+        if (mais_votado==True):
             smt=repository.mais_votado(smt=smt)#depois preciso sicronizar com os outros filtros
             dados=repository.executar_first(smt)
             try:
@@ -62,12 +62,14 @@ class ElencoService():
         dados=serializar_lista(dados)
         return dados
     def votar(self,nome):
+        if(len(nome)<3):
+            raise ErroValorMinimo
         repository.update_voto(nome)
     def stats(self):
         total_vivos=repository.total_vivos_mortos(vivo=True)
         total_mortos=repository.total_vivos_mortos(vivo=False)
         
-        smt=repository.mais_votado(smt=repository.get_select())#depois preciso sicronizar com os outros filtros
+        smt=repository.mais_votado(smt=repository.get_select())
         dados=repository.executar_first(smt)
         total_personagem=repository.total_personagem()
 
@@ -76,7 +78,6 @@ class ElencoService():
                  "total de personagens mortos": total_mortos,
                  "personagem com maior quantidade de votos":f"{dados.nome} {dados.upvote} votos",
                  }
-
     def ranking(self,top:int):
         
         smt=repository.mais_votado(smt=repository.get_select()).limit(limit=top)

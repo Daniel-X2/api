@@ -1,7 +1,7 @@
 from sqlalchemy import update, select,func
 from sqlalchemy.orm import Session
 from dados.banco import engine,Elenco
-import random
+
 class ElencoRepository():
 
     def __init__(self):
