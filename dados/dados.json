@@ -40,6 +40,142 @@
             "vivo":true,
             "habilidade":["hacker"],
             "upvote":15
+        },
+        {
+            "id":6,
+            "nome":"Auggie Smith / Dragão Branco",
+            "ator":"Robert Patrick",
+            "vivo":false,
+            "habilidade": ["Gênio da tecnologia", "Ideologia supremacista", "Armadura poderosa"],
+            "upvote":12
+        },
+        {
+            "id":7,
+            "nome":"Clemson Murn",
+            "ator":"Chukwudi Iwuji",
+            "vivo":false,
+            "habilidade":["Mercenário", "Líder da equipe (Projeto Borboleta)"],
+            "upvote":10
+        },
+        {
+            "id":8,
+            "nome":"Mestre Judoca / Judomaster",
+            "ator":"Nhut Le",
+            "vivo":true,
+            "habilidade":["Mestre em Judô", "Lutador"],
+            "upvote":8
+        },
+        {
+            "id":9,
+            "nome":"Detetive Sophie Song",
+            "ator":"Annie Chang",
+            "vivo":false,
+            "habilidade":["Detetive "],
+            "upvote":4
+        },
+        {
+            "id":10,
+            "nome":"Capitão Locke",
+            "ator":"Christopher Heyerdahl",
+            "vivo":false,
+            "habilidade":["atirador","mercenário", "Manipulador"],
+            "upvote":2
+        },
+        {
+            "id":11,
+            "nome":"Eagly",
+            "ator":"passarinho anormal",
+            "vivo":true,
+            "habilidade":["matar", "abraçar", "voar"],
+            "upvote":20
+        },
+        {
+            "id":12,
+            "nome":"Amanda Waller",
+            "ator":"Viola Davis",
+            "vivo":true,
+            "habilidade":["Estrategista","Manipuladora"],
+            "upvote":18
+        },
+        {
+            "id":13,
+            "nome":"Rick Flag",
+            "ator":"Joel Kinnaman",
+            "vivo":false,
+            "habilidade":["Líder Militar","Especialista em Combate"],
+            "upvote":14
+        },
+        {
+            "id":14,
+            "nome":"Detetive Larry Fitzgibbon",
+            "ator":"Lochlyn Munro",
+            "vivo":true,
+            "habilidade":["Detetive"],
+            "upvote":25
+        },
+        {
+            "id": 15,
+            "nome": "Sasha Bordeaux",
+            "ator": "Sol Rodriguez",
+            "vivo": true,
+            "habilidade": ["assasina profissional", "lutadora"],
+            "upvote": 0
+        },
+        {
+            "id": 16,
+            "nome": "Keeya Adebayo",
+            "ator": "Elizabeth Faith Ludlow",
+            "vivo": true,
+            "habilidade": ["cuida de pets"],
+            "upvote": 0
+        },
+        {
+            "id": 17,
+            "nome": "Langston Fleury",
+            "ator": "Tim Meadows",
+            "vivo": true,
+            "habilidade": ["idiota","cegueira de passaro"],
+            "upvote": 0
+        },
+        {
+            "id": 19,
+            "nome": "Keith Smith / Capitão Triunfo",
+            "ator": "David Denman",
+            "vivo": false,
+            "habilidade": ["Matador"],
+            "upvote": 0
+        },
+        {
+            "id": 22,
+            "nome": "Kyphotic Alien",
+            "ator": "Dorian Kingi",
+            "vivo": true,
+            "habilidade": ["ser esquisito"],
+            "upvote": 0
+        },
+        {
+            "id": 23,
+            "nome": "Red St. Wild",
+            "ator": "Michael Rooker",
+            "vivo": false,
+            "habilidade": ["caçador de aguias" ],
+            "upvote": 0
+        },
+        {
+            "id": 24,
+            "nome": " Gorila",
+            "ator": "Stephen Blackehart",
+            "vivo": false,
+            "habilidade": ["come bananas"],
+            "upvote": 0
+        },
+        {
+            "id": 26,
+            "nome": "Mãe do Vigilante",
+            "ator": "Taylor St. Clair",
+            "vivo": true,
+            "habilidade": ["amorosa", "doida","gente boa"],
+            "upvote": 0
         }
     ]
 }
